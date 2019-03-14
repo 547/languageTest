@@ -14,7 +14,7 @@ class LanguageTool {
         case ch_hk = "zh-HK"
     }
     ///默认语言
-    static var defaultLanguage = LocalLanguage.en
+    private var defaultLanguage = LocalLanguage.en
     static let `default` = LanguageTool.init()
     
     var currentLanguage:LocalLanguage = .en{
@@ -33,6 +33,7 @@ class LanguageTool {
     let languageFileName = "Localizable"
     
     private init() {
+        defaultLanguage = getSystemLanguage()
         currentLanguage = getLanguage()
     }
 }
@@ -44,13 +45,31 @@ extension LanguageTool {
     }
 }
 private extension LanguageTool {
+    func getSystemLanguage() -> LocalLanguage {
+        var result = LocalLanguage.en
+        guard let languages = UserDefaults.standard.object(forKey: "AppleLanguages") as? [String], languages.count > 0 else { return result }
+        let currentLanguage = languages[0]
+        /*
+         * zh-Hant-CN 繁体中文
+         * zh-Hant-HK 繁体中文(香港)
+         * zh-Hant-TW 繁体中文(台湾)
+         * zh-Hant-MO 繁体中文(澳门)
+         * zh-Hans-CN 简体中文
+         */
+        if currentLanguage.hasPrefix("zh-Hans") {
+            result = .ch
+        }else if currentLanguage.hasPrefix("zh-Hant") {
+            result = .ch_hk
+        }
+        return result
+    }
     func resetLanguage(_ language:LocalLanguage) -> () {
         let userDefault = UserDefaults.standard
         userDefault.set(language.rawValue, forKey: languageKey)
         userDefault.synchronize()
     }
     func getLanguage() -> LocalLanguage {
-        var result = LanguageTool.defaultLanguage
+        var result = defaultLanguage
         let userDefault = UserDefaults.standard
         if let value = userDefault.value(forKey: languageKey) as? String, let newResult = LocalLanguage.init(rawValue: value) {
             result = newResult

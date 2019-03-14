@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        LanguageTool.defaultLanguage = .ch_hk
         NotificationCenter.default.addObserver(self, selector: #selector(languageChanged), name: NSNotification.Name.init(LanguageTool.default.languageChangedNotificationNameKey), object: nil)
         return true
     }
