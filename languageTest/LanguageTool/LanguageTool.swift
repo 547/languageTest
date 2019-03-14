@@ -13,9 +13,10 @@ class LanguageTool {
         case ch = "zh-Hans"
         case ch_hk = "zh-HK"
     }
+    static let `default` = LanguageTool.init()
+    
     ///默认语言
     private var defaultLanguage = LocalLanguage.en
-    static let `default` = LanguageTool.init()
     
     var currentLanguage:LocalLanguage = .en{
         didSet{
