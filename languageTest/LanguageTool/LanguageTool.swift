@@ -9,8 +9,11 @@
 import Foundation
 class LanguageTool {
     enum LocalLanguage: String {
+        ///英文
         case en = "en"
+        ///中文简体
         case ch = "zh-Hans"
+        ///中文繁体
         case ch_hk = "zh-HK"
     }
     static let `default` = LanguageTool.init()
